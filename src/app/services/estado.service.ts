@@ -12,11 +12,24 @@ export class EstadoService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getEstados(): Observable<Estado[]> {
+  findAll(): Observable<Estado[]> {
     return this.httpClient.get<Estado[]>(this.baseUrl); 
   }
 
-  salvar(estado: Estado): Observable<Estado> {
+  findById(id: number): Observable<Estado> {
+    return this.httpClient.get<Estado>(`${this.baseUrl}/${id}`); 
+  }
+
+  insert(estado: Estado): Observable<Estado> {
     return this.httpClient.post<Estado>(this.baseUrl, estado);
   }
+
+  update(estado: Estado): Observable<Estado> {
+    return this.httpClient.put<any>(`${this.baseUrl}/${estado.id}`, estado); 
+  }
+
+  delete(id: number): Observable<any>{
+    return this.httpClient.delete<any>(`${this.baseUrl}/${id}`); 
+  }
+
 }

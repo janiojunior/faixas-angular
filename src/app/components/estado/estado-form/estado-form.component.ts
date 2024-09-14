@@ -30,7 +30,7 @@ export class EstadoFormComponent {
   onSubmit() {
     if (this.formGroup.valid) {
       const novoEstado = this.formGroup.value;
-      this.estadoService.salvar(novoEstado).subscribe({
+      this.estadoService.insert(novoEstado).subscribe({
         next: (estadoCadastrado) => {
           this.router.navigateByUrl('/estados');
         },
