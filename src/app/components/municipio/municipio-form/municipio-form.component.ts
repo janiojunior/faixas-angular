@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Estado } from '../../../models/estado.model';
 import { EstadoService } from '../../../services/estado.service';
 import { MunicipioService } from '../../../services/municipio.service';
@@ -53,13 +53,15 @@ export class MunicipioFormComponent implements OnInit {
     
     this.formGroup = this.formBuilder.group({
       id: [(municipio && municipio.id) ? municipio.id : null],
-      nome: [(municipio && municipio.nome) ? municipio.nome : null, Validators.required],
+      nome: [(municipio && municipio.nome) ? municipio.nome : null, 
+              Validators.compose([Validators.required, Validators.minLength(2),Validators.maxLength(10)])],
       estado: [estado]
     })
 
   }
 
   salvar() {
+    this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
       const municipio = this.formGroup.value;
       if (municipio.id ==null) {
@@ -81,6 +83,8 @@ export class MunicipioFormComponent implements OnInit {
           }
         });
       }
+    } else {
+      console.log("Formulário inválido.")
     }
   }
 
@@ -97,6 +101,27 @@ export class MunicipioFormComponent implements OnInit {
           }
         });
       }
+    }
+  }
+
+  getErrorMessage(controlName : string, errors: ValidationErrors | null | undefined): string {
+    if (!errors){
+      return '';
+    }
+    for (const errorName in errors) {
+      if (errors.hasOwnProperty(errorName) && this.errorMessages[controlName][errorName]){
+        return this.errorMessages[controlName][errorName];
+      }
+    }
+
+    return 'invalid field';
+  }
+
+  errorMessages: {[controlName: string]: {[errorName: string]: string}} = {
+    nome : {
+      required: 'O nome deve ser informado.',
+      minlength: 'O nome deve conter ao menos 2 letras.',
+      maxlength: 'O nome deve conter no máximo 10 letras.'
     }
   }
 
