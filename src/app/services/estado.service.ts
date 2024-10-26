@@ -32,7 +32,7 @@ export class EstadoService {
     return this.httpClient.get<number>(`${this.baseUrl}/count`); 
   }
 
-  findById(id: number): Observable<Estado> {
+  findById(id: string): Observable<Estado> {
     return this.httpClient.get<Estado>(`${this.baseUrl}/${id}`); 
   }
 

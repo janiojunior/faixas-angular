@@ -4,10 +4,12 @@ import { EstadoFormComponent } from './components/estado/estado-form/estado-form
 import { MunicipioListComponent } from './components/municipio/municipio-list/municipio-list.component';
 import { MunicipioFormComponent } from './components/municipio/municipio-form/municipio-form.component';
 import { municipioResolver } from './components/municipio/resolver/municipio.resolver';
+import { estadoResolver } from './components/estado/resolver/municipio.resolver';
 
 export const routes: Routes = [
     {path: 'estados',component: EstadoListComponent, title: 'Lista de Estados'},
     {path: 'estados/new',component: EstadoFormComponent, title: 'Novo Estado'},
+    {path: 'estados/edit/:id',component: EstadoFormComponent, resolve: {estado: estadoResolver}},
     {path: 'municipios',component: MunicipioListComponent, title: 'Lista de Municipios'},
     {path: 'municipios/new',component: MunicipioFormComponent, title: 'Novo Municipio'},
     {path: 'municipios/edit/:id',component: MunicipioFormComponent, resolve: {municipio: municipioResolver}}
