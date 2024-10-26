@@ -23,7 +23,7 @@ export class EstadoListComponent implements OnInit {
 
   // variaveis de controle para a paginacao
   totalRecords = 0;
-  pageSize = 2;
+  pageSize = 5;
   page = 0;
 
 

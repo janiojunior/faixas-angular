@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -50,31 +51,45 @@ export class EstadoFormComponent implements OnInit {
 
   }
 
+  tratarErros(errorResponse: HttpErrorResponse) {
+
+    if (errorResponse.status === 400) {
+      if (errorResponse.error?.errors) {
+        errorResponse.error.errors.forEach((validationError: any) => {
+          const formControl = this.formGroup.get(validationError.fieldName);
+
+          if (formControl) {
+            formControl.setErrors({apiError: validationError.message})
+          }
+
+        });
+      }
+    } else if (errorResponse.status < 400){
+      alert(errorResponse.error?.message || 'Erro genérico do envio do formulário.');
+    } else if (errorResponse.status >= 500) {
+      alert('Erro interno do servidor.');
+    }
+
+  }
+
   salvar() {
     this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
       const estado = this.formGroup.value;
-      if (estado.id == null) {
-        this.estadoService.insert(estado).subscribe({
-          next: (estadoCadastrado) => {
-            this.router.navigateByUrl('/estados');
-          },
-          error: (err) => {
-            console.log('Erro ao Incluir' + JSON.stringify(err));
-          }
-        });
-      } else {
-        this.estadoService.update(estado).subscribe({
-          next: (estadoAlterado) => {
-            this.router.navigateByUrl('/estados');
-          },
-          error: (err) => {
-            console.log('Erro ao Editar' + JSON.stringify(err));
-          }
-        });
-      }
-    } else {
-      console.log("Formulário inválido.")
+
+      // selecionando a operacao (insert ou update)
+      const operacao = estado.id == null
+      ? this.estadoService.insert(estado)
+      : this.estadoService.update(estado);
+
+      // executando a operacao
+      operacao.subscribe({
+        next: () => this.router.navigateByUrl('/estados'),
+        error: (error) => {
+          console.log('Erro ao Salvar' + JSON.stringify(error));
+          this.tratarErros(error);
+        }
+      });
     }
   }
 
@@ -111,7 +126,15 @@ export class EstadoFormComponent implements OnInit {
     nome: {
       required: 'O nome deve ser informado.',
       minlength: 'O nome deve conter ao menos 2 letras.',
-      maxlength: 'O nome deve conter no máximo 10 letras.'
+      maxlength: 'O nome deve conter no máximo 10 letras.',
+      apiError: ' '
+    },
+
+    sigla: {
+      required: 'A sigla deve ser informada.',
+      minlength: 'O nome deve conter 2 letras.',
+      maxlength: 'O nome deve conter 2 letras.',
+      apiError: ' '
     }
   }
 

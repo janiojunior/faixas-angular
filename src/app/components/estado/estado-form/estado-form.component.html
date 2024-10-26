@@ -11,7 +11,14 @@
                     <mat-error *ngIf="formGroup.get('nome') 
                                    && formGroup.get('nome')?.invalid
                                    && formGroup.get('nome')?.touched">
+                        <!-- erros do front-end -->
                         {{getErrorMessage('nome', formGroup.get('nome')?.errors)}}
+
+                        <!-- erros do back-end -->
+                        @if(formGroup.get('nome')?.hasError('apiError')) {
+                           <span>{{formGroup.get('nome')?.getError('apiError')}}</span> 
+                        }
+
                     </mat-error>
                 </mat-form-field>
 
@@ -22,6 +29,11 @@
                                    && formGroup.get('sigla')?.invalid
                                    && formGroup.get('sigla')?.touched">
                         {{getErrorMessage('sigla', formGroup.get('sigla')?.errors)}}
+
+                        <!-- erros do back-end -->
+                        @if(formGroup.get('sigla')?.hasError('apiError')) {
+                            <span>{{formGroup.get('sigla')?.getError('apiError')}}</span> 
+                        }
                     </mat-error>
                 </mat-form-field>
                 
