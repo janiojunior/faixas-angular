@@ -5,12 +5,24 @@ import { MunicipioListComponent } from './components/municipio/municipio-list/mu
 import { MunicipioFormComponent } from './components/municipio/municipio-form/municipio-form.component';
 import { municipioResolver } from './components/municipio/resolver/municipio.resolver';
 import { estadoResolver } from './components/estado/resolver/municipio.resolver';
+import { AdminTemplateComponent } from './components/template/admin-template/admin-template.component';
 
 export const routes: Routes = [
-    {path: 'estados',component: EstadoListComponent, title: 'Lista de Estados'},
-    {path: 'estados/new',component: EstadoFormComponent, title: 'Novo Estado'},
-    {path: 'estados/edit/:id',component: EstadoFormComponent, resolve: {estado: estadoResolver}},
-    {path: 'municipios',component: MunicipioListComponent, title: 'Lista de Municipios'},
-    {path: 'municipios/new',component: MunicipioFormComponent, title: 'Novo Municipio'},
-    {path: 'municipios/edit/:id',component: MunicipioFormComponent, resolve: {municipio: municipioResolver}}
-];
+    { 
+        path: 'admin', 
+        component: AdminTemplateComponent, 
+        title: 'e-commerce',
+        children: [
+            {path: '', pathMatch: 'full', redirectTo: 'estados'},
+        
+            { path: 'estados', component: EstadoListComponent, title: 'Lista de Estados'},
+            { path: 'estados/new', component: EstadoFormComponent, title: 'Novo Estado'},
+            { path: 'estados/edit/:id', component: EstadoFormComponent, resolve: {estado: estadoResolver}},
+        
+            { path: 'municipios', component: MunicipioListComponent, title: 'Lista de Municipios'},
+            { path: 'municipios/new', component: MunicipioFormComponent, title: 'Novo Municipio'},
+            { path: 'municipios/edit/:id', component: MunicipioFormComponent, resolve: {municipio: municipioResolver}},
+        
+        ]
+    }
+]

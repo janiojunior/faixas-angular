@@ -84,7 +84,7 @@ export class EstadoFormComponent implements OnInit {
 
       // executando a operacao
       operacao.subscribe({
-        next: () => this.router.navigateByUrl('/estados'),
+        next: () => this.router.navigateByUrl('/admin/estados'),
         error: (error) => {
           console.log('Erro ao Salvar' + JSON.stringify(error));
           this.tratarErros(error);
@@ -99,7 +99,7 @@ export class EstadoFormComponent implements OnInit {
       if (estado.id != null) {
         this.estadoService.delete(estado).subscribe({
           next: () => {
-            this.router.navigateByUrl('/estados');
+            this.router.navigateByUrl('/admin/estados');
           },
           error: (err) => {
             console.log('Erro ao Excluir' + JSON.stringify(err));

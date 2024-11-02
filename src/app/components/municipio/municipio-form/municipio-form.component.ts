@@ -67,7 +67,7 @@ export class MunicipioFormComponent implements OnInit {
       if (municipio.id ==null) {
         this.municipioService.insert(municipio).subscribe({
           next: (municipioCadastrado) => {
-            this.router.navigateByUrl('/municipios');
+            this.router.navigateByUrl('/admin/municipios');
           },
           error: (err) => {
             console.log('Erro ao Incluir' + JSON.stringify(err));
@@ -76,7 +76,7 @@ export class MunicipioFormComponent implements OnInit {
       } else {
         this.municipioService.update(municipio).subscribe({
           next: (municipioAlterado) => {
-            this.router.navigateByUrl('/municipios');
+            this.router.navigateByUrl('/admin/municipios');
           },
           error: (err) => {
             console.log('Erro ao Editar' + JSON.stringify(err));
@@ -94,7 +94,7 @@ export class MunicipioFormComponent implements OnInit {
       if (municipio.id != null) {
         this.municipioService.delete(municipio).subscribe({
           next: () => {
-            this.router.navigateByUrl('/municipios');
+            this.router.navigateByUrl('/admin/municipios');
           },
           error: (err) => {
             console.log('Erro ao Excluir' + JSON.stringify(err));
