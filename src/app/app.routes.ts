@@ -6,12 +6,24 @@ import { MunicipioFormComponent } from './components/municipio/municipio-form/mu
 import { municipioResolver } from './components/municipio/resolver/municipio.resolver';
 import { estadoResolver } from './components/estado/resolver/municipio.resolver';
 import { AdminTemplateComponent } from './components/template/admin-template/admin-template.component';
+import { FaixaCardListComponent } from './components/faixa/faixa-card-list/faixa-card-list.component';
+import { UserTemplateComponent } from './components/template/user-template/user-template.component';
 
 export const routes: Routes = [
     { 
+        path: '', 
+        component: UserTemplateComponent, 
+        title: 'e-commerce',
+        children: [
+            {path: '', pathMatch: 'full', redirectTo: 'ecommerce'},
+        
+            { path: 'ecommerce', component: FaixaCardListComponent, title: 'Lista de Cards de Faixas'},
+        ]
+    },    
+    { 
         path: 'admin', 
         component: AdminTemplateComponent, 
-        title: 'e-commerce',
+        title: 'Administração',
         children: [
             {path: '', pathMatch: 'full', redirectTo: 'estados'},
         
