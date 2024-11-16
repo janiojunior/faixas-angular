@@ -19,7 +19,7 @@ export const routes: Routes = [
             {path: '', pathMatch: 'full', redirectTo: 'ecommerce'},
         
             { path: 'ecommerce', component: FaixaCardListComponent, title: 'Lista de Cards de Faixas'},
-            { path: 'login', component: LoginComponent, title: 'Login'},
+
         ]
     },    
     { 
@@ -28,6 +28,8 @@ export const routes: Routes = [
         title: 'Administração',
         children: [
             {path: '', pathMatch: 'full', redirectTo: 'estados'},
+
+            { path: 'login', component: LoginComponent, title: 'Login'},
         
             { path: 'estados', component: EstadoListComponent, title: 'Lista de Estados'},
             { path: 'estados/new', component: EstadoFormComponent, title: 'Novo Estado'},

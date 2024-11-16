@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgIf } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -19,20 +20,50 @@ import { NgIf } from '@angular/common';
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
 
   constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
+    this.loginForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    });
   }
 
   onSubmit() {
+    if (this.loginForm.valid) {
+      const username = this.loginForm.get('username')?.value;
+      const password = this.loginForm.get('password')?.value;
+
+      this.authService.loginADM(username, password).subscribe ({
+        next: (resp) => {
+          // redirecionando para a pagina principal
+          this.router.navigateByUrl('/admin');
+        },
+        error: (err) => {
+          console.log(err);
+          this.showSnackbarTopPosition("Username ou senha inválido");
+        }
+      })
+
+    }
   }
 
   onRegister() {
     // criar usuário
   }
 
-  showSnackbarTopPosition(content: any, action: any, duration: any) {
+  showSnackbarTopPosition(content: any) {
+    this.snackBar.open(content, 'fechar', {
+      duration: 3000,
+      verticalPosition: "top",
+      horizontalPosition: "center"
+    });
   }
 }
