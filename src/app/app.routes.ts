@@ -8,6 +8,7 @@ import { estadoResolver } from './components/estado/resolver/municipio.resolver'
 import { AdminTemplateComponent } from './components/template/admin-template/admin-template.component';
 import { FaixaCardListComponent } from './components/faixa/faixa-card-list/faixa-card-list.component';
 import { UserTemplateComponent } from './components/template/user-template/user-template.component';
+import { LoginComponent } from './components/login/login.component';
 
 export const routes: Routes = [
     { 
@@ -18,6 +19,7 @@ export const routes: Routes = [
             {path: '', pathMatch: 'full', redirectTo: 'ecommerce'},
         
             { path: 'ecommerce', component: FaixaCardListComponent, title: 'Lista de Cards de Faixas'},
+            { path: 'login', component: LoginComponent, title: 'Login'},
         ]
     },    
     { 

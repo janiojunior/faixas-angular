@@ -13,10 +13,16 @@ import { SidebarService } from '../../../services/sidebar.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(private sidebarService: SidebarService) {
 
+  }
+
+  ngOnInit(): void {
+  }
+
+  ngOnDestroy() {
   }
 
   clickMenu() {
