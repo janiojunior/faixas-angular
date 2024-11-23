@@ -7,7 +7,7 @@
             <form [formGroup]="formGroup">
                 <mat-form-field appearance="fill" class="full-width-input">
                     <mat-label>Nome</mat-label>
-                    <input matInput type="text" formControlName="nome">
+                    <input matInput type="text" formControlName="nome" #inputNome>
                     <mat-error *ngIf="formGroup.get('nome') 
                                    && formGroup.get('nome')?.invalid
                                    && formGroup.get('nome')?.touched">
@@ -39,7 +39,7 @@
 
                 <mat-form-field appearance="fill" class="full-width-input">
                     <mat-label>Preço</mat-label>
-                    <input matInput type="text" formControlName="preco">
+                    <input matInput type="text" formControlName="preco" #inputPreco>
                     <mat-error *ngIf="formGroup.get('preco') 
                                    && formGroup.get('preco')?.invalid
                                    && formGroup.get('preco')?.touched">
@@ -66,6 +66,51 @@
                         }
                     </mat-error>
                 </mat-form-field>
+
+                <mat-form-field appearance="fill" class="full-width-input">
+                    <mat-label>Modalidade</mat-label>
+                    <mat-select formControlName="modalidade" #selectModalidade >
+                        <mat-option *ngFor="let modalidade of modalidades" [value]="modalidade">
+                            {{ modalidade.label }}
+                        </mat-option>
+                    </mat-select>
+
+                    <mat-error *ngIf="formGroup.get('modalidade')?.hasError('apiError')">
+                        {{ formGroup.get('modalidade')?.getError('apiError') }}
+                    </mat-error>
+                </mat-form-field>  
+                
+                <mat-form-field appearance="outline" class="full-width-input">
+                    <mat-label>Imagem da Faixa</mat-label>
+                    <input type="file" (change)="carregarImagemSelecionada($event)" hidden #fileInput>
+                    <input matInput [value]="fileName" readonly>
+                    
+                    <button mat-icon-button matSuffix (click)="fileInput.click()">
+                        <mat-icon>folder_open</mat-icon>
+                    </button>   
+                </mat-form-field>
+                
+                <div *ngIf="imagePreview" class="container responsive-grid">
+                    <mat-card>
+                
+                        <img mat-card-image [src]="imagePreview" >
+                       
+                        <mat-card-title class="centered-text"> {{inputNome.value}} </mat-card-title>
+                        
+                        <mat-card-content class="centered-text"> {{selectModalidade.value.label}} </mat-card-content>
+                        <br/>
+                        <mat-card-content class="centered-text"> {{inputPreco.value}} </mat-card-content>
+                
+                        <mat-card-actions class="centered-text">
+                            <button mat-button color="primary">Ver mais ...</button>
+                        </mat-card-actions>
+                
+                        <mat-card-footer>
+                            <button mat-flat-button color="accent"
+                                style="width: 100%; padding: 16px;">Adicionar ao carrinho</button>
+                        </mat-card-footer>
+                    </mat-card>
+                </div>
                 
             </form>
         </mat-card-content>

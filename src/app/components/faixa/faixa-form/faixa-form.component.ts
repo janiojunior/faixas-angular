@@ -4,53 +4,82 @@ import { Faixa } from '../../../models/faixa.model';
 import { FaixaService } from '../../../services/faixa.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
-import { NgIf } from '@angular/common';
+import { Location, NgFor, NgIf } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Modalidade } from '../../../models/modalidade.model';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
   selector: 'app-faixa-form',
   standalone: true,
-  imports: [NgIf, ReactiveFormsModule, MatFormFieldModule,
+  imports: [NgIf, NgFor, ReactiveFormsModule, MatFormFieldModule,
     MatInputModule, MatButtonModule, MatCardModule, MatToolbarModule,
-    RouterModule, MatSelectModule],
+    RouterModule, MatSelectModule, MatIconModule],
   templateUrl: './faixa-form.component.html',
   styleUrl: './faixa-form.component.css'
 })
 export class FaixaFormComponent implements OnInit {
   formGroup: FormGroup;
+  modalidades: Modalidade[] = [];
+
+  fileName: string = '';
+  selectedFile: File | null = null; 
+  imagePreview: string | ArrayBuffer | null = null;
 
   constructor(private formBuilder: FormBuilder,
     private faixaService: FaixaService,
     private router: Router,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,
+    private location: Location) {
+
     this.formGroup = this.formBuilder.group({
       id: [null],
       nome: ['', Validators.required],
       descricao: ['', Validators.required],
       preco: ['', Validators.required],
-      estoque: ['', Validators.required]
+      estoque: ['', Validators.required],
+      modalidade:[null]
     })
   }
 
   ngOnInit(): void {
-    this.initializeForm();
+
+    this.faixaService.findModalidades().subscribe(data => {
+      this.modalidades = data;
+      this.initializeForm();
+    });
+  }
+
+  voltarPagina() {
+    this.location.back();
   }
 
   initializeForm(): void {
     const faixa: Faixa = this.activatedRoute.snapshot.data['faixa'];
+
+    // encontrando a referencia da modalidade no vetor
+    const modalidade = this.modalidades.find(m => m.id === (faixa?.modalidade?.id || null));
+
+    // carregando a imagem do preview
+    if (faixa && faixa.nomeImagem) {
+      this.imagePreview = this.faixaService.getUrlImage(faixa.nomeImagem);
+      this.fileName = faixa.nomeImagem;
+    }
+
 
     this.formGroup = this.formBuilder.group({
       id: [(faixa && faixa.id) ? faixa.id : null],
       nome: [(faixa && faixa.nome) ? faixa.nome : null],
       descricao: [(faixa && faixa.descricao) ? faixa.descricao : null],
       preco: [(faixa && faixa.preco) ? faixa.preco : null],
-      estoque: [(faixa && faixa.estoque) ? faixa.estoque : null]
+      estoque: [(faixa && faixa.estoque) ? faixa.estoque : null],
+      modalidade: [modalidade]
     })
 
   }
@@ -76,6 +105,36 @@ export class FaixaFormComponent implements OnInit {
 
   }
 
+  carregarImagemSelecionada(event: any) {
+    this.selectedFile = event.target.files[0];
+
+    if (this.selectedFile) {
+      this.fileName = this.selectedFile.name;
+      // carregando image preview
+      const reader = new FileReader();
+      reader.onload = e => this.imagePreview = reader.result;
+      reader.readAsDataURL(this.selectedFile);
+    }
+
+  }
+
+  private uploadImage(faixaId: number) {
+    if (this.selectedFile) {
+      this.faixaService.uploadImage(faixaId, this.selectedFile.name, this.selectedFile)
+      .subscribe({
+        next: () => {
+          this.voltarPagina();
+        },
+        error: err => {
+          console.log('Erro ao fazer o upload da imagem');
+          // tratar o erro
+        }
+      })
+    } else {
+      this.voltarPagina();
+    }
+  }
+
   salvar() {
     this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
@@ -88,7 +147,9 @@ export class FaixaFormComponent implements OnInit {
 
       // executando a operacao
       operacao.subscribe({
-        next: () => this.router.navigateByUrl('/admin/faixas'),
+        next: (faixaCadastrada) => {
+          this.uploadImage(faixaCadastrada.id);
+        },
         error: (error) => {
           console.log('Erro ao Salvar' + JSON.stringify(error));
           this.tratarErros(error);
