@@ -36,11 +36,41 @@
                         }
                     </mat-error>
                 </mat-form-field>
+
+                <mat-form-field appearance="fill" class="full-width-input">
+                    <mat-label>Preço</mat-label>
+                    <input matInput type="text" formControlName="preco">
+                    <mat-error *ngIf="formGroup.get('preco') 
+                                   && formGroup.get('preco')?.invalid
+                                   && formGroup.get('preco')?.touched">
+                        {{getErrorMessage('preco', formGroup.get('preco')?.errors)}}
+
+                        <!-- erros do back-end -->
+                        @if(formGroup.get('preco')?.hasError('apiError')) {
+                            <span>{{formGroup.get('preco')?.getError('apiError')}}</span> 
+                        }
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="full-width-input">
+                    <mat-label>Estoque</mat-label>
+                    <input matInput type="text" formControlName="estoque">
+                    <mat-error *ngIf="formGroup.get('estoque') 
+                                   && formGroup.get('estoque')?.invalid
+                                   && formGroup.get('estoque')?.touched">
+                        {{getErrorMessage('estoque', formGroup.get('estoque')?.errors)}}
+
+                        <!-- erros do back-end -->
+                        @if(formGroup.get('estoque')?.hasError('apiError')) {
+                            <span>{{formGroup.get('estoque')?.getError('apiError')}}</span> 
+                        }
+                    </mat-error>
+                </mat-form-field>
                 
             </form>
         </mat-card-content>
         <mat-card-actions>
-            <button mat-raised-button routerLink="../">
+            <button mat-raised-button routerLink="/admin/faixas">
                 Cancelar
             </button>
 

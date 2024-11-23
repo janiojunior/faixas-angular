@@ -32,7 +32,9 @@ export class FaixaFormComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       id: [null],
       nome: ['', Validators.required],
-      descricao: ['', Validators.required]
+      descricao: ['', Validators.required],
+      preco: ['', Validators.required],
+      estoque: ['', Validators.required]
     })
   }
 
@@ -46,7 +48,9 @@ export class FaixaFormComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       id: [(faixa && faixa.id) ? faixa.id : null],
       nome: [(faixa && faixa.nome) ? faixa.nome : null],
-      descricao: [(faixa && faixa.descricao) ? faixa.descricao : null]
+      descricao: [(faixa && faixa.descricao) ? faixa.descricao : null],
+      preco: [(faixa && faixa.preco) ? faixa.preco : null],
+      estoque: [(faixa && faixa.estoque) ? faixa.estoque : null]
     })
 
   }
@@ -134,6 +138,14 @@ export class FaixaFormComponent implements OnInit {
       required: 'A descricao deve ser informada.',
       minlength: 'O nome deve conter 2 letras.',
       maxlength: 'O nome deve conter 2 letras.',
+      apiError: ' '
+    },
+    preco: {
+      required: 'O preço deve ser informado.',
+      apiError: ' '
+    },
+    estoque: {
+      required: 'O estoque deve ser informado.',
       apiError: ' '
     }
   }

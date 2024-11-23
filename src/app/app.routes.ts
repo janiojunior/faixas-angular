@@ -9,6 +9,9 @@ import { AdminTemplateComponent } from './components/template/admin-template/adm
 import { FaixaCardListComponent } from './components/faixa/faixa-card-list/faixa-card-list.component';
 import { UserTemplateComponent } from './components/template/user-template/user-template.component';
 import { LoginComponent } from './components/login/login.component';
+import { FaixaListComponent } from './components/faixa/faixa-list/faixa-list.component';
+import { FaixaFormComponent } from './components/faixa/faixa-form/faixa-form.component';
+import { faixaResolver } from './components/faixa/resolver/faixa.resolver';
 
 export const routes: Routes = [
     { 
@@ -38,6 +41,10 @@ export const routes: Routes = [
             { path: 'municipios', component: MunicipioListComponent, title: 'Lista de Municipios'},
             { path: 'municipios/new', component: MunicipioFormComponent, title: 'Novo Municipio'},
             { path: 'municipios/edit/:id', component: MunicipioFormComponent, resolve: {municipio: municipioResolver}},
+
+            { path: 'faixas', component: FaixaListComponent, title: 'Lista de Faixas'},
+            { path: 'faixas/new', component: FaixaFormComponent, title: 'Novo Faixa'},
+            { path: 'faixas/edit/:id', component: FaixaFormComponent, resolve: {faixa: faixaResolver}},
         
         ]
     }
