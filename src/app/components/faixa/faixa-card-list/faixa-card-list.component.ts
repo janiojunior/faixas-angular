@@ -1,11 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardActions, MatCardContent, MatCardFooter, MatCardModule, MatCardTitle } from '@angular/material/card';
 import { Faixa } from '../../../models/faixa.model';
 import { FaixaService } from '../../../services/faixa.service';
-import { MatCardActions, MatCardContent, MatCardFooter, MatCardModule, MatCardTitle } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { NgFor } from '@angular/common';
 
 type Card = {
+  idFaixa: number,
   titulo: string;
   modalidade: string
   preco: number
@@ -24,7 +25,8 @@ export class FaixaCardListComponent implements OnInit {
   faixas: Faixa[] = [];
   cards = signal<Card[]>([]);
 
-  constructor(private faixaService: FaixaService) {
+  constructor(private faixaService: FaixaService
+  ) {
 
   }
   ngOnInit(): void {
@@ -43,6 +45,7 @@ export class FaixaCardListComponent implements OnInit {
     const cards: Card[] = [];
     this.faixas.forEach(faixa => {
       cards.push({
+        idFaixa: faixa.id,
         titulo: faixa.nome,
         modalidade: faixa.modalidade.label,
         preco: faixa.preco,
@@ -51,7 +54,5 @@ export class FaixaCardListComponent implements OnInit {
     });
     this.cards.set(cards);
   }
-
-  
 
 }
