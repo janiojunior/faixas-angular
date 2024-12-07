@@ -13,6 +13,7 @@ import { FaixaListComponent } from './components/faixa/faixa-list/faixa-list.com
 import { FaixaFormComponent } from './components/faixa/faixa-form/faixa-form.component';
 import { faixaResolver } from './components/faixa/resolver/faixa.resolver';
 import { CarrinhoComponent } from './components/carrinho/carrinho.component';
+import { authGuard } from './guard/auth.guard';
 
 export const routes: Routes = [
     { 
@@ -31,13 +32,14 @@ export const routes: Routes = [
         path: 'admin', 
         component: AdminTemplateComponent, 
         title: 'Administração',
+        canActivate: [authGuard],
         children: [
             {path: '', pathMatch: 'full', redirectTo: 'estados'},
 
-            { path: 'login', component: LoginComponent, title: 'Login'},
+            { path: 'login', component: LoginComponent, title: 'Login', canActivate:[]},
         
             { path: 'estados', component: EstadoListComponent, title: 'Lista de Estados'},
-            { path: 'estados/new', component: EstadoFormComponent, title: 'Novo Estado'},
+            { path: 'estados/new', component: EstadoFormComponent, title: 'Novo Estado', canActivate: [authGuard]},
             { path: 'estados/edit/:id', component: EstadoFormComponent, resolve: {estado: estadoResolver}},
         
             { path: 'municipios', component: MunicipioListComponent, title: 'Lista de Municipios'},
