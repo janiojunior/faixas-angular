@@ -23,6 +23,7 @@ export const routes: Routes = [
             {path: '', pathMatch: 'full', redirectTo: 'ecommerce'},
         
             { path: 'ecommerce', component: FaixaCardListComponent, title: 'Lista de Cards de Faixas'},
+            { path: 'carrinho', component: CarrinhoComponent, title: 'Carrinho de Compras'},
 
         ]
     },    
